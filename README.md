@@ -1,4 +1,4 @@
-# Jaffa GPS App
+# Jaffa
 
 ## Overview
 
