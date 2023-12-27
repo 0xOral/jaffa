@@ -16,16 +16,6 @@ Jaffa is a feature-rich GPS application that helps users find the fastest route 
 
 - **Secure Password Management:** The app includes a built-in password manager that securely stores and manages your passwords using advanced hashing techniques.
 
-## Photos
-
-Jaffa supports the integration of custom photos for a personalized experience. Follow the steps below to include custom photos:
-
-1. Create a directory named `photos` in the root of the project.
-2. Add your custom photos to the `photos` directory.
-3. When using the GUI, explore the settings to customize the appearance, including background images and icons.
-
-Feel free to enhance your navigation experience by adding your favorite images to make Jaffa uniquely yours!
-
 ## Getting Started
 
 ### Prerequisites
