@@ -28,6 +28,18 @@ Feel free to enhance your navigation experience by adding your favorite images t
 
 ## Getting Started
 
+### Prerequisites
+
+- Ensure you have [Python](https://www.python.org/) installed (version 3.7 or higher).
+- Install required dependencies by running: `pip install -r requirements.txt`
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/jaffa-gps-app.git
+
 ...
 
 ## Usage
