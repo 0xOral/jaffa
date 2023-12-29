@@ -10,8 +10,10 @@ from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 from pygame import mixer
 import pywinstyles
+import pywinstyles.py_win_style
 
 class Jaffa:
+    
     def __init__(self, master:ctk.CTk, background_image_path, uname, *args):
 
         self.graph = {
@@ -71,7 +73,11 @@ class Jaffa:
         
         self.master.title("Jaffa")
         self.master.geometry('1920x1080')
-        if self.glass: pywinstyles.apply_style(master, "aero")
+        if self.glass:
+            HWND = pywinstyles.py_win_style.detect(self.master)
+            pywinstyles.py_win_style.paint(self.master)
+            pywinstyles.ChangeDWMAccent(HWND, 5, 1)
+            pywinstyles.ChangeDWMAccent(HWND, 19, 3, color=0x000005)
         self.master.bind("<F1>", self.sound_swich)
         self.master.bind("<F2>", self.play_next_song)
         master.bind("<F7>", self._glass)
