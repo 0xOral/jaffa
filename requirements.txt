@@ -1,6 +1,5 @@
 customtkinter
 Pillow
-datetime
 pyttsx3
 pygame
 pywin32
