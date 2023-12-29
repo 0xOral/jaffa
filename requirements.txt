@@ -1,12 +1,7 @@
-# requirements.txt
-
 customtkinter
 Pillow
 datetime
-login
-random
-time
 pyttsx3
-dataclasses
 pygame
 pywin32
+pywinstyles
