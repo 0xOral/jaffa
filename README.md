@@ -34,11 +34,10 @@ Jaffa is a feature-rich GPS application that helps users find the fastest route 
 
 ## Usage
 if you any problem like extreme glow effect press F7
+
 ![Screenshot (340)](https://github.com/AnasMady22/jaffa/assets/110070707/90f3feb8-cbdf-48c7-968e-f1c8ed03e3da)
 
-![Screenshot (341)](https://github.com/AnasMady22/jaffa/assets/110070707/3e6c2b56-51bb-4ddb-85c9-5b59a20f3fd8)
 
-![Screenshot (344)](https://github.com/AnasMady22/jaffa/assets/110070707/0c0377c8-1b32-4bb5-87ec-bed030910200)
 
 ![Screenshot (345)](https://github.com/AnasMady22/jaffa/assets/110070707/1f9ad734-83f0-40c2-a5de-6927965fada6)
 
