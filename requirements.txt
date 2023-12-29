@@ -6,4 +6,3 @@ pygame
 pywin32
 pywinstyles
 hashlib
-getopt
