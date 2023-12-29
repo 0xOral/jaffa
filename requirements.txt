@@ -1,6 +1,9 @@
 customtkinter
+tkinter
 Pillow
 pyttsx3
 pygame
 pywin32
 pywinstyles
+hashlib
+getopt
