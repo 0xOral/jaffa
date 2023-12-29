@@ -34,7 +34,7 @@ Jaffa is a feature-rich GPS application that helps users find the fastest route 
 
 ## Usage
 
-1. Clone the repository:
+1. direct login:
 
    ```bash
    python login.py -u {username} -p {password}
@@ -43,7 +43,6 @@ Jaffa is a feature-rich GPS application that helps users find the fastest route 
 
    ```bash
    python login.py
-
 
 if you any problem like extreme glow effect press F7
 
