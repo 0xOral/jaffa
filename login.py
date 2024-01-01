@@ -156,14 +156,14 @@ def _getopt():
     except getopt.error as err: print(err)
     return (username, password)
     
-def play():
-    
-    arguments = _getopt()
-    if arguments:
-        name, passwd = arguments
-        if (check(name, hash(passwd))): main.play(name)
-        else: print("wrong password or usernmae")
-        exit()
+def play(back=1):
+    if back:
+        arguments = _getopt()
+        if arguments:
+            name, passwd = arguments
+            if (check(name, hash(passwd))): main.play(name)
+            else: print("wrong password or usernmae")
+            exit()
         
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("dark-blue")
