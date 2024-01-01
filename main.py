@@ -5,8 +5,9 @@ from datetime import datetime
 import login
 import random
 import time
+import os
 import pyttsx3
-from data import cli, db, CTF
+from data import cli, db, CTF, hydra
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 from pygame import mixer
@@ -65,7 +66,6 @@ class Jaffa:
         self.mode = 'dark'
         self.palestine_list = self._palestine_list()
         self.font = 17
-        self.is_there_game = 0
         self.game = None
         self.Current_drawing = []
         self.command_history = []
@@ -73,6 +73,7 @@ class Jaffa:
         self.general_history = []
         self.oval_container = []
         self.current_song_index = 0
+        self.Working_directory = os.getcwd()
         self.is_any_speak = 0
         self.glass = 0 if "no glass" in args[0] else 1
         
@@ -89,8 +90,6 @@ class Jaffa:
         self.master.bind("<Control-equal>", self.increase_cli_text_size)
         self.master.bind("<Control-minus>", self.decrease_cli_text_size)
         # master.bind("<F12>", lambda: exit*())
-        
-        
 
         # cli frame
         
@@ -211,21 +210,23 @@ class Jaffa:
             self.insert_general_history(action)
 
     def on_Up(self, event):
-        if self.current_command_index == len(self.command_history):
-            print("black")
-            self.current_command_index -= 1
-
-        self.entry.delete(0,"end")
-        self.entry.insert(ctk.END, self.command_history[self.current_command_index])
-        if self.current_command_index != 0: self.current_command_index -= 1
+        try:
+            if self.current_command_index == len(self.command_history):
+                self.current_command_index -= 1
+            self.entry.delete(0,"end")
+            self.entry.insert(ctk.END, self.command_history[self.current_command_index])
+            if self.current_command_index != 0: self.current_command_index -= 1
+        except: pass
         
     def on_Down(self, event):
-        if self.current_command_index == len(self.command_history): return
-        if self.current_command_index == 0:
-            self.current_command_index += 1
-        self.entry.delete(0,"end")
-        self.entry.insert(ctk.END, self.command_history[self.current_command_index])
-        if self.current_command_index != len(self.command_history): self.current_command_index += 1
+        try: 
+            if self.current_command_index == len(self.command_history): return
+            if self.current_command_index == 0:
+                self.current_command_index += 1
+            self.entry.delete(0,"end")
+            self.entry.insert(ctk.END, self.command_history[self.current_command_index])
+            if self.current_command_index != len(self.command_history): self.current_command_index += 1
+        except: pass
     
     def on_enter(self, event):
         self.current_command_index = len(self.command_history)-1
@@ -241,6 +242,7 @@ class Jaffa:
     def execute_command(self):
         command = self.entry.get()
         if not command: return  
+        pwd = os.getcwd()
         self.output_area.configure(state='normal')
         self.history.configure(state='normal')
         self.output_area.insert(ctk.END, f"{command}\n")
@@ -252,6 +254,7 @@ class Jaffa:
         if self.uname != 'dev': self.history.configure(state='disabled')
         if self.uname != 'dev': self.output_area.configure(state='disabled')
         self.current_command_index += 1
+        
 
     def process_command(self, command: str):
         s_command = command.split() 
@@ -282,7 +285,7 @@ class Jaffa:
             return "All nodes are hided."
         elif s_command[0] == 'whoami':
             if len(s_command) == 1: return self.uname
-            return f'ERROR: Invalid argument/option - \'{command[7:]}\'.\nType "whoami" for usage.'
+            return f'ERROR: Invalid argument/option.'
         
         ans = cli.getter(command, self.general_history, self.command_history, self.nodes, self.graph, self.uname)
         if isinstance(ans, str): return ans
@@ -349,13 +352,19 @@ class Jaffa:
             return ans[1]
         elif ans[0] == 'game':
             if self.uname == 'player':
-                self.is_there_game = 1
                 self.output_area.insert(ctk.END, f"the Game started..\n{self.uname}@jaffa:~$ ")
                 self.entry.delete(0, ctk.END)
+                if self.uname != 'dev': self.history.configure(state='disabled')
                 self.game = CTF.game()
                 return ""
             else: 
                 return "You have to be player."
+        elif ans[0] == 'hydra':
+            self.output_area.insert(ctk.END, f"...\n{self.uname}@jaffa:~$ ")
+            self.entry.delete(0, ctk.END)
+            self.hydra = hydra.hydra()
+            if self.uname != 'dev': self.history.configure(state='disabled')
+            return ""
         elif ans[0] == 'back':
             self.master.destroy()
             login.play(0)
