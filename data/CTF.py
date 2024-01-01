@@ -46,7 +46,7 @@ class game:
             self.output_area.yview(ctk.END)
             self.entry.delete(0, ctk.END)
             return
-        self.output_area.configure(text_color=)
+
         self.level += 1
         next_level = db.levels[self.level]
         self.output_area.insert(ctk.END, next_level)
