@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import login
+import main
 from data import db
 
 game_keys = {
@@ -46,7 +47,8 @@ class game:
             self.output_area.yview(ctk.END)
             self.entry.delete(0, ctk.END)
             return
-
+        self.text_color = main.Jaffa.increment_color("", self.text_color, 10)
+        self.output_area.configure(text_color=self.text_color)
         self.level += 1
         next_level = db.levels[self.level]
         self.output_area.insert(ctk.END, next_level)
