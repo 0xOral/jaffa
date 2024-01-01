@@ -348,11 +348,14 @@ class Jaffa:
                 return event
             return ans[1]
         elif ans[0] == 'game':
-            self.is_there_game = 1
-            self.output_area.insert(ctk.END, f"the Game started..\n{self.uname}@jaffa:~$ ")
-            self.entry.delete(0, ctk.END)
-            self.game = CTF.game()
-            return ""
+            if self.uname == 'player':
+                self.is_there_game = 1
+                self.output_area.insert(ctk.END, f"the Game started..\n{self.uname}@jaffa:~$ ")
+                self.entry.delete(0, ctk.END)
+                self.game = CTF.game()
+                return ""
+            else: 
+                return "You have to be player."
         elif ans[0] == 'back':
             self.master.destroy()
             login.play(0)
