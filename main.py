@@ -1,11 +1,12 @@
 import customtkinter as ctk
+import tkinter as tk
 from PIL import Image, ImageTk
 from datetime import datetime
 import login
 import random
 import time
 import pyttsx3
-from data import cli,db
+from data import cli, db, CTF
 from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 from pygame import mixer
@@ -19,20 +20,20 @@ class Jaffa:
         self.graph = {
             'Safad': ['Acre','Tiberias'],
             'Acre': ['Haifa','Nazareth','Tiberias','Safad'],
-            'Haifa': ['Nazareth','Acre','Jinin','Tulkarm'],
+            'Haifa': ['Nazareth','Acre', 'Atlantis', 'Jinin','Tulkarm'],
             'Tiberias': ['Safad','Acre','Nazareth','Baysan'],
             'Nazareth': ['Baysan','Tiberias','Acre','Jinin','Haifa'],
             'Baysan': ['Tiberias','Nazareth','Jinin'],
             'Jinin': ['Tulkarm','Nablus','Baysan','Nazareth','Haifa'],
             'Nablus': ['Jinin','Tulkarm','Ramallah'],
             'Tulkarm': ['Haifa','Jinin','Nablus','jaffa'],
-            'jaffa': ['Tulkarm','al-Ramla'],
+            'jaffa': ['Tulkarm','Atlantis','al-Ramla'],
             'Ramallah': ['Al-Quds','al-Ramla','Nablus'],
             'al-Ramla': ['jaffa','Ramallah','Al-Quds','Gaza'],
             'Al-Quds': ['al-Ramla','Ramallah','Hebron'],
             'Hebron': ['Al-Quds','Beersheba'],
             'Beersheba': ['Hebron','Gaza'],
-            'Gaza': ['al-Ramla','Beersheba']
+            'Gaza': ['al-Ramla','Atlantis','Beersheba']
         }
         # (x,y)
         self.nodes={'Safad': (450,120),
@@ -52,7 +53,9 @@ class Jaffa:
                     'Al-Quds': (371.5,561),
                     'Hebron': (338.4,651),
                     'Beersheba': (236,748),
-                    'Gaza': (137,665.6)}
+                    'Gaza': (137,665.6),
+                    'Atlantis': (-5,50)}
+                    
         self.uname = uname
         self.master = master
         self.text_box_width = 383
@@ -62,6 +65,8 @@ class Jaffa:
         self.mode = 'dark'
         self.palestine_list = self._palestine_list()
         self.font = 17
+        self.is_there_game = 0
+        self.game = None
         self.Current_drawing = []
         self.command_history = []
         self.current_command_index = -1
@@ -80,9 +85,13 @@ class Jaffa:
             pywinstyles.ChangeDWMAccent(HWND, 19, 3, color=0x000005)
         self.master.bind("<F1>", self.sound_swich)
         self.master.bind("<F2>", self.play_next_song)
-        master.bind("<F7>", self._glass)
+        self.master.bind("<F7>", self._glass)
+        self.master.bind("<Control-equal>", self.increase_cli_text_size)
+        self.master.bind("<Control-minus>", self.decrease_cli_text_size)
         # master.bind("<F12>", lambda: exit*())
         
+        
+
         # cli frame
         
         self.cli_frame = ctk.CTkFrame(border_width=0,master=self.master, height=1000, width=920)
@@ -181,6 +190,14 @@ class Jaffa:
         # self.draw_nodes()
         self.play_current_song(0,0.1)
         
+    def increase_cli_text_size(self, event):
+        self.font += 1
+        self.output_area.configure(font=('', self.font))
+        
+    def decrease_cli_text_size(self, event):
+        self.font -= 1
+        self.output_area.configure(font=('', self.font))
+    
     def sound_swich(self, event):
         if self.is_any_speak:
             mixer.music.pause()
@@ -272,14 +289,19 @@ class Jaffa:
         elif ans[0] == 'go':
             if len(ans) == 2: return ans[1]
             self.entry.delete(0, ctk.END)
-            self.output_area.insert(ctk.END, "... ")
             self.Go(ans[1], ans[2], ans[3], ans[4])
-            return f"welcom to {ans[2]}."
+            return ""
         elif ans[0] == 'adduser':
             login.add_email(ans[1],login.hash(ans[2]),self.uname)
             action = f"ACTION: in {self.get_time()} {self.uname} add user with name {ans[1]}.\n"
             self.insert_general_history(action)
             return f"done, user added successfully\nnew user is {ans[0]}."
+        elif ans[0] == 'chuname':
+            _return = f"username has been changed from {self.uname} to {ans[1]}"
+            action = f"ACTION: in {self.get_time()} '{self.uname}' change his name from '{self.uname}' to '{ans[1]}'\n"
+            self.insert_general_history(action)
+            self.uname = ans[1]
+            return _return
         elif ans[0] == 'su':
             if len(ans) == 2: return ans[1]
             if login.check(ans[1], login.hash(ans[2])):
@@ -325,12 +347,16 @@ class Jaffa:
                 self.mode = 'cmd'
                 return event
             return ans[1]
+        elif ans[0] == 'game':
+            self.is_there_game = 1
+            self.output_area.insert(ctk.END, f"the Game started..\n{self.uname}@jaffa:~$ ")
+            self.entry.delete(0, ctk.END)
+            self.game = CTF.game()
+            return ""
         elif ans[0] == 'back':
             self.master.destroy()
-            login.play()
+            login.play(0)
             return 'bay'
-        elif ans[0] == 'cat/passwd':
-            with open("data/db.csv") as file: return file.read()
         elif ans[0] == 'music':
             if ans[1] == 'stop': 
                 self.stop_music()
@@ -526,10 +552,15 @@ class Jaffa:
         self.Go(From, To)
         
     def Go(self, From, To, wiki=0, sound=0):
+        lsty = self.graph.keys()
+        if From not in lsty or (To not in lsty and To != "Atlantis"):
+            self.display_result(f"{From if From not in lsty else To} is not a city!")
+            return
         if From == To:
             if not self.is_any_speak: self.play_sound(file_path="data\\sound\\You Serious.mp3")
             return 
             
+        self.output_area.insert(ctk.END, "... ")
         lst = self.BFS(From,To)
         if self.Current_drawing:
             self.clean_screen()
@@ -547,6 +578,7 @@ class Jaffa:
             self.draw_lines(lst)
         _lst = " -> ".join(lst)
         trip = f"TRIP: in {self.get_time()} {self.uname} start a trip From {From} To {To} by taking the path {{{_lst}}}\n"
+        self.display_result(f"welcom to {To}.")
         self.insert_general_history(trip)
         
     def insert_general_history(self, trip):
@@ -569,7 +601,7 @@ class Jaffa:
     def stop_music(self):
         mixer.music.stop()
         self.is_any_speak = 0
-        
+    
 def play(uname, *args, **kwargs):
     ctk.set_appearance_mode("dark")
     ctk.set_default_color_theme("dark-blue")
@@ -578,6 +610,6 @@ def play(uname, *args, **kwargs):
     root.attributes('-fullscreen', True)
     app = Jaffa(root, "data\\palestine_states.jpg", uname, args)
     root.mainloop()
-    
+
 if __name__ == "__main__":
     play("root")
