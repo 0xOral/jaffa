@@ -258,7 +258,7 @@ def getter(command: str, general_history, command_history, nodes:dict, graph: di
                 if currentArgument in ("-h", "--help"): return ["go", db.go_help_message ]
                 elif currentArgument in ("-p", "--passwd"):
                     passwd = currentValue
-                    if not login.check(uname, login.hash(passwd)): return f"{passwd} incorrect." 
+                    if not login.check(uname, login.hash(passwd)): return f"incorrect password." 
                 elif currentArgument in ("-n", "--new-username"):
                     new_username = currentValue
             if passwd and new_username: return['chuname', new_username]
@@ -309,7 +309,7 @@ def getter(command: str, general_history, command_history, nodes:dict, graph: di
         try:
             arguments, values = getopt.getopt(argumentList, options, long_options)
             for currentArgument, currentValue in arguments:
-                if currentArgument in ("-h", "--help"): return db.hash_help_message
+                if currentArgument in ("-h", "--help"): return db.game_help_message
             for currentValue in values:
                 if currentValue == "start": return ["game", "start"]
             return ""
