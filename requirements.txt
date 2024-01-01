@@ -1,3 +1,5 @@
+# the flag have 38 hexa char. You're close.
+
 customtkinter
 tkinter
 Pillow
