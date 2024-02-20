@@ -1,5 +1,6 @@
-# the flag have 38 hexa char. You're close.
+# the flag have 38 hexa char, You're clos. :)
 
+# dependencies
 customtkinter
 tkinter
 Pillow
