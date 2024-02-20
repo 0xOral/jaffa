@@ -13,7 +13,7 @@ environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 from pygame import mixer
 import pywinstyles
 import pywinstyles.py_win_style
-
+hi i'am there
 class Jaffa:
     
     def __init__(self, master:ctk.CTk, background_image_path, uname, *args):
