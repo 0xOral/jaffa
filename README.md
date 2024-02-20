@@ -1,5 +1,5 @@
 # Jaffa
-
+💯
 ## Overview
 
 Jaffa is a feature-rich GPS application that helps users find the fastest route from one destination to another. It comes with a user-friendly GUI (Graphical User Interface) and a powerful terminal interface for advanced users. The app not only provides efficient navigation but also includes additional features such as email integration and secure password management.
