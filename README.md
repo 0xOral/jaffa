@@ -57,5 +57,4 @@ if you any problem like extreme glow effect press F7
 ...
 
 ## License
-elnahl elarabi ❤ palestineisours@proton.me 
 This project is licensed under the Sigmas License - see the [LICENSE](LICENSE) file for details.
